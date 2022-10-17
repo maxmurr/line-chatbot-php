@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Artisan;
 
 class ItemController extends Controller
 {
-
     public function index()
     {
         return Item::all();
@@ -40,12 +39,6 @@ class ItemController extends Controller
         $multiMessageBuilder = new MultiMessageBuilder();
         $multiMessageBuilder->add(new TextMessageBuilder(json_encode(Item::latest()->first())));
         $response = $bot->pushMessage($userId, $multiMessageBuilder);
-
-        // if($item->save()){
-        //     Artisan::call('push:message', [
-        //         'userId' => 'U1e25a7ce8e3e826b9aa5899adc321a67'
-        //     ]);
-        // }
     }
 
     public function show(Item $item)

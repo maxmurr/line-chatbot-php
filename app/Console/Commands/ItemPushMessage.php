@@ -39,8 +39,8 @@ class ItemPushMessage extends Command
         $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(env('LINE_ACCESS_TOKEN'));
         $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => env('LINE_CHANNEL_SECRET')]);
 
-        $packageId = 8522;
-        $stickerId = 16581266;
+        $packageId = 11537;
+        $stickerId = 52002765;
 
         $multiMessageBuilder = new MultiMessageBuilder();
         $multiMessageBuilder->add(new StickerMessageBuilder($packageId, $stickerId));
