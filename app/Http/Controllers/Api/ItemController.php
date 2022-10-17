@@ -15,6 +15,9 @@ use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use App\Http\Controllers\LineWebHookController;
+use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
+use Illuminate\Console\Command;
 
 class ItemController extends Controller
 {
@@ -24,16 +27,15 @@ class ItemController extends Controller
         return Item::all();
     }
 
-    public function store(Request $request){
-        return item::create($request->all());
-        if($item->save()){
-            $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(env('LINE_ACCESS_TOKEN'));
-            $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => env('LINE_CHANNEL_SECRET')]);
+    public function store(Request $request)
+    {
+        return Item::create($request->all());
 
-            $userId = 'U975203f455a4ccea0895697498dbe776';
-            $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('hello');
-            $response = $bot->pushMessage($userId, $textMessageBuilder);     
-        }
+        Artisan::call('push:message', [
+            'userId' => 'U1e25a7ce8e3e826b9aa5899adc321a67'
+        ]);
+
+            //$userId = 'U1e25a7ce8e3e826b9aa5899adc321a67';
     }
 
     public function show(Item $item)
