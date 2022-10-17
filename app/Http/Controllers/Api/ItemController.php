@@ -18,6 +18,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use App\Http\Controllers\LineWebHookController;
 use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class ItemController extends Controller
 {
@@ -29,13 +30,22 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        return Item::create($request->all());
+        Item::create($request->all());
 
-        Artisan::call('push:message', [
-            'userId' => 'U1e25a7ce8e3e826b9aa5899adc321a67'
-        ]);
+        $userId = 'U1e25a7ce8e3e826b9aa5899adc321a67';
 
-            //$userId = 'U1e25a7ce8e3e826b9aa5899adc321a67';
+        $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(env('LINE_ACCESS_TOKEN'));
+        $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => env('LINE_CHANNEL_SECRET')]);
+
+        $multiMessageBuilder = new MultiMessageBuilder();
+        $multiMessageBuilder->add(new TextMessageBuilder(json_encode(Item::latest()->first())));
+        $response = $bot->pushMessage($userId, $multiMessageBuilder);
+
+        // if($item->save()){
+        //     Artisan::call('push:message', [
+        //         'userId' => 'U1e25a7ce8e3e826b9aa5899adc321a67'
+        //     ]);
+        // }
     }
 
     public function show(Item $item)
